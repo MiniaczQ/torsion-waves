@@ -7,11 +7,14 @@ edition = "2021"
 
 [dependencies]
 bevy = "0.7"
-bevy_flycam = "*"
 bevy_egui = "0.14"
+itertools = "0.10"
 
 [profile.dev.package."*"]
 debug = false
 opt-level = 3
 debug-assertions = false
 overflow-checks = false
+
+[target.wasm32-unknown-unknown]
+runner = "wasm-server-runner"

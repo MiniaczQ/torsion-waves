@@ -1,0 +1,8 @@
+- consider 2-string model (currently 1-string model)
+  - harmonic forces (return to 0)
+- store angle separately (winding)
+- consider dx in calculations (needs tweaking)
+- lighting?
+- moving poles with mouse
+- scale down gaps between poles as amount increases
+- stabilize

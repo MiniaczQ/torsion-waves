@@ -409,15 +409,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "bevy_flycam"
-version = "0.7.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "62afad12266a3ecb439c7386896deab6ec1ccff5c2f9baaa916ae56dc02f7b4a"
-dependencies = [
- "bevy",
-]
-
-[[package]]
 name = "bevy_gilrs"
 version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1325,6 +1316,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "either"
+version = "1.6.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e78d4f1cc4ae33bbfc157ed5d5a5ef3bc29227303d595861deb238fcec4e9457"
+
+[[package]]
 name = "emath"
 version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1819,6 +1816,15 @@ checksum = "f21dcc74995dd4cd090b147e79789f8d65959cbfb5f0b118002db869ea3bd0a0"
 dependencies = [
  "core-foundation-sys 0.6.2",
  "mach 0.2.3",
+]
+
+[[package]]
+name = "itertools"
+version = "0.10.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a9a9d19fa1e79b6215ff29b9d6880b706147f16e9b1dbb1e4e5947b5b02bc5e3"
+dependencies = [
+ "either",
 ]
 
 [[package]]
@@ -3061,7 +3067,7 @@ version = "0.1.0"
 dependencies = [
  "bevy",
  "bevy_egui",
- "bevy_flycam",
+ "itertools",
 ]
 
 [[package]]
