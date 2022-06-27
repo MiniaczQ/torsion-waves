@@ -98,7 +98,6 @@ fn damping_force(velocity: f32, settings: &SoftSettings) -> f32 {
 }
 
 /// Calculates agitation forces on edge-most (top and bottom) poles
-/// The force is currently omega * force (doesn't make much sense)
 fn agitation_force((bottom, top): (bool, bool), settings: &SoftSettings, time: f64) -> f32 {
     let top = if top {
         (time * settings.top_frequency as f64 * std::f64::consts::TAU).sin() as f32
