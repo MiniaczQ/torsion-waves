@@ -106,13 +106,16 @@ fn damping_torque(velocity: f32, settings: &SoftSettings) -> f32 {
 /// Calculates agitation torque on edge-most (top and bottom) poles
 fn agitation_torque((bottom, top): (bool, bool), settings: &SoftSettings, time: f64) -> f32 {
     let top = if top {
-        (time * settings.top_frequency as f64 * std::f64::consts::TAU).sin() as f32
+        (time * settings.top_frequency as f64 * std::f64::consts::TAU + settings.top_phase as f64)
+            .sin() as f32
             * settings.top_force
     } else {
         0.0
     };
     let bottom = if bottom {
-        (time * settings.bottom_frequency as f64 * std::f64::consts::TAU).sin() as f32
+        (time * settings.bottom_frequency as f64 * std::f64::consts::TAU
+            + settings.bottom_phase as f64)
+            .sin() as f32
             * settings.bottom_force
     } else {
         0.0

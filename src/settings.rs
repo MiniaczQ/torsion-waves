@@ -12,9 +12,11 @@ pub struct SoftSettings {
     pub anchor_bottom: bool,
 
     pub top_frequency: f32,
+    pub top_phase: f32,
     pub top_force: f32,
 
     pub bottom_frequency: f32,
+    pub bottom_phase: f32,
     pub bottom_force: f32,
 }
 
@@ -29,9 +31,11 @@ impl Default for SoftSettings {
             anchor_top: false,
 
             top_frequency: 0.0,
+            top_phase: 0.0,
             top_force: 0.0,
 
             bottom_frequency: 0.0,
+            bottom_phase: 0.0,
             bottom_force: 0.0,
         }
     }

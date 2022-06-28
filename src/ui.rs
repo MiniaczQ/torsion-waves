@@ -70,7 +70,7 @@ fn settings_ui(
                 egui::Slider::new(&mut soft_settings.damping, -1.0..=0.0)
                     .clamp_to_range(false)
                     .prefix("α = ")
-                    .suffix(" [...]")
+                    .suffix(" N * s")
                     .text("Damping"),
             );
             if soft_settings.damping > 0.0 {
@@ -88,15 +88,22 @@ fn settings_ui(
                 egui::Slider::new(&mut soft_settings.top_frequency, -0.5..=0.5)
                     .clamp_to_range(false)
                     .prefix("f = ")
-                    .suffix(" [...]")
+                    .suffix(" 1 / s")
                     .text("Frequency"),
+            );
+            ui.add(
+                egui::Slider::new(&mut soft_settings.top_phase, -0.5..=0.5)
+                    .clamp_to_range(false)
+                    .prefix("φ = ")
+                    .suffix(" rad")
+                    .text("Phase"),
             );
             ui.add(
                 egui::Slider::new(&mut soft_settings.top_force, -1.0..=1.0)
                     .clamp_to_range(false)
                     .prefix("M = ")
-                    .suffix(" [...]")
-                    .text("Moment of force"),
+                    .suffix(" N * m")
+                    .text("Torque"),
             );
 
             ui.separator();
@@ -105,15 +112,22 @@ fn settings_ui(
                 egui::Slider::new(&mut soft_settings.bottom_frequency, -0.5..=0.5)
                     .clamp_to_range(false)
                     .prefix("f = ")
-                    .suffix(" [...]")
+                    .suffix(" 1 / s")
                     .text("Frequency"),
+            );
+            ui.add(
+                egui::Slider::new(&mut soft_settings.bottom_phase, -0.5..=0.5)
+                    .clamp_to_range(false)
+                    .prefix("φ = ")
+                    .suffix(" rad")
+                    .text("Phase"),
             );
             ui.add(
                 egui::Slider::new(&mut soft_settings.bottom_force, -1.0..=1.0)
                     .clamp_to_range(false)
                     .prefix("M = ")
-                    .suffix(" [...]")
-                    .text("Moment of force"),
+                    .suffix(" N * m")
+                    .text("Torque"),
             );
 
             ui.separator();
