@@ -19,6 +19,6 @@ impl Plugin for ScaledTimePlugin {
 }
 
 fn update(mut scaled_time: ResMut<ScaledTime>, time: Res<Time>, settings: Res<SoftSettings>) {
-    scaled_time.delta = time.delta_seconds() * settings.time_scale;
+    scaled_time.delta = (time.delta_seconds() * settings.time_scale).clamp(0.0, 0.01);
     scaled_time.total += scaled_time.delta as f64;
 }

@@ -29,7 +29,7 @@ fn settings_ui(
         .show(egui_context.ctx_mut(), |ui| {
             ui.heading("General");
             ui.add(
-                egui::Slider::new(&mut soft_settings.time_scale, 0.0..=10.0)
+                egui::Slider::new(&mut soft_settings.time_scale, 0.0..=1.0)
                     .clamp_to_range(true)
                     .text("Time scale"),
             );
