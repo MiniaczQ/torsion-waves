@@ -94,8 +94,7 @@ fn wave_torque(
     soft_settings: &SoftSettings,
     hard_settings: &HardSettings,
 ) -> f32 {
-    let dda =
-        wrap(above - 2.0 * current + below) / (hard_settings.distance * hard_settings.distance);
+    let dda = wrap(above - 2.0 * current + below) / hard_settings.distance;
     dda * soft_settings.stiffness
 }
 
@@ -125,10 +124,11 @@ fn agitation_torque((bottom, top): (bool, bool), settings: &SoftSettings, time: 
 /// Executed after torques are applied
 fn apply_angular_velocities(
     mut query: Query<(&mut Transform, &AngularVelocity), With<Pole>>,
+    hard_settings: Res<HardSettings>,
     time: Res<ScaledTime>,
 ) {
     query.iter_mut().for_each(|(mut transform, velocity)| {
-        let angle_delta = velocity.0 * time.delta;
+        let angle_delta = velocity.0 * time.delta / hard_settings.distance;
         let quat_delta = Quat::from_rotation_y(angle_delta);
         transform.rotation *= quat_delta;
     });

@@ -169,12 +169,12 @@ fn help_ui(mut egui_context: ResMut<EguiContext>, help_message: ResMut<HelpMessa
                         .background_color(bg_color),
                 );
                 ui.label(
-                    egui::RichText::new("Move with WSAD, `Shift` and `Spacebar`.")
+                    egui::RichText::new("Move with Mouse, WSAD, `Shift` and `Spacebar`.")
                         .color(color)
                         .background_color(bg_color),
                 );
                 ui.label(
-                    egui::RichText::new("Adjust simulation settings with UI.")
+                    egui::RichText::new("Adjust simulation settings with graphical interface.")
                         .color(color)
                         .background_color(bg_color),
                 );
