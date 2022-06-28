@@ -7,4 +7,4 @@ Features:
 - Reasonably written code.
 - And more features in the future. :)
 
-[Check it out!](https://miniaczq.itch.io/torque-waves-simulation)
+[Check it out!](https://miniaczq.itch.io/torsion-waves-simulation)
