@@ -24,12 +24,14 @@ fn collect_angles(query: Query<(Entity, &Transform)>) -> HashMap<Entity, f32> {
         .collect()
 }
 
-/// Wraps values to [-pi; pi]
+/// Wraps values to `[-pi; pi]`
 fn wrap(a: f32) -> f32 {
     (a + std::f32::consts::PI).rem_euclid(std::f32::consts::TAU) - std::f32::consts::PI
 }
 
-fn apply_forces(
+/// Applies torques for this frame
+/// Executed before angular velocities are applied
+fn apply_torques(
     In(angles): In<HashMap<Entity, f32>>,
     mut query: Query<(Entity, &Pole, &mut AngularVelocity)>,
     soft_settings: Res<SoftSettings>,
@@ -71,34 +73,39 @@ fn apply_forces(
     });
 
     // Iterates over 3-wide windows of angles
-    // Runs force calculations
+    // Runs torque calculations
     // Updates angular velocities
+    //
+    // `edge` is a pair of booleans indicating bottom-most or top-most pole
+    // `neighbour_angles` is a tuple of 3 angles: angle of pole below, angle of current pole, angle of pole above
+    // `angular_velocity` is self-explainatory
     for (edge, neighbour_angles, mut angular_velocity) in triplets {
-        let w = wave_force(neighbour_angles, &soft_settings, &hard_settings);
-        let d = damping_force(angular_velocity.0, &soft_settings);
-        let a = agitation_force(edge, &soft_settings, time.total);
-        let force = w + d + a;
-        angular_velocity.0 += force * time.delta / soft_settings.moment_of_inertia;
+        let w = wave_torque(neighbour_angles, &soft_settings, &hard_settings);
+        let d = damping_torque(angular_velocity.0, &soft_settings);
+        let a = agitation_torque(edge, &soft_settings, time.total);
+        let total_torque = w + d + a;
+        angular_velocity.0 += total_torque * time.delta / soft_settings.moment_of_inertia;
     }
 }
 
-/// Calculates the wave-based force from 3 neighbouring angles and stiffness `k`
-fn wave_force(
+/// Calculates the wave-based torque from 3 neighbouring angles, stiffness `k` and distance between poles
+fn wave_torque(
     (below, current, above): (f32, f32, f32),
     soft_settings: &SoftSettings,
     hard_settings: &HardSettings,
 ) -> f32 {
-    let dda = wrap(above - 2.0 * current + below);
-    dda * soft_settings.stiffness / (hard_settings.distance * hard_settings.distance)
+    let dda =
+        wrap(above - 2.0 * current + below) / (hard_settings.distance * hard_settings.distance);
+    dda * soft_settings.stiffness
 }
 
-/// Calculates damping force based on velocity and damping coefficient
-fn damping_force(velocity: f32, settings: &SoftSettings) -> f32 {
+/// Calculates damping torque based on velocity and damping coefficient
+fn damping_torque(velocity: f32, settings: &SoftSettings) -> f32 {
     velocity * settings.damping
 }
 
-/// Calculates agitation forces on edge-most (top and bottom) poles
-fn agitation_force((bottom, top): (bool, bool), settings: &SoftSettings, time: f64) -> f32 {
+/// Calculates agitation torque on edge-most (top and bottom) poles
+fn agitation_torque((bottom, top): (bool, bool), settings: &SoftSettings, time: f64) -> f32 {
     let top = if top {
         (time * settings.top_frequency as f64 * std::f64::consts::TAU).sin() as f32
             * settings.top_force
@@ -114,8 +121,9 @@ fn agitation_force((bottom, top): (bool, bool), settings: &SoftSettings, time: f
     top + bottom
 }
 
-/// Applies velocities for this frame
-fn apply_velocities(
+/// Applies angular velocities for this frame
+/// Executed after torques are applied
+fn apply_angular_velocities(
     mut query: Query<(&mut Transform, &AngularVelocity), With<Pole>>,
     time: Res<ScaledTime>,
 ) {
@@ -131,7 +139,7 @@ pub struct WavePlugin;
 
 impl Plugin for WavePlugin {
     fn build(&self, app: &mut App) {
-        app.add_system(collect_angles.chain(apply_forces).label("apply-forces"))
-            .add_system(apply_velocities.after("apply-forces"));
+        app.add_system(collect_angles.chain(apply_torques).label("apply-forces"))
+            .add_system(apply_angular_velocities.after("apply-forces"));
     }
 }
